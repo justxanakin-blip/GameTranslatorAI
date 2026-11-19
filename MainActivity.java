@@ -1,63 +1,51 @@
 
 package com.gametranslator.ai;
 
-import android.app.*;
-import android.os.*;
-import android.content.*;
-import android.media.projection.*;
-import android.graphics.*;
-import android.view.*;
-import android.widget.*;
-import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.TextRecognition;
-import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.media.projection.MediaProjectionManager;
+import android.os.Build;
+import android.os.Bundle;
 
 public class MainActivity extends Activity {
-
-    private TextView result;
-    private MediaProjectionManager projectionManager;
+    private static final int REQ_CAPTURE = 100;
+    private static final int REQ_NOTIF = 101;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        projectionManager = (MediaProjectionManager)
-                getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setPadding(30, 40, 30, 30);
-
-        TextView title = new TextView(this);
-        title.setText("GAME TRANSLATOR AI");
-        title.setTextSize(24);
-
-        Button scan = new Button(this);
-        scan.setText("EKRANI OXU");
-
-        result = new TextView(this);
-        result.setTextSize(18);
-
-        layout.addView(title);
-        layout.addView(scan);
-        layout.addView(result);
-
-        setContentView(layout);
-
-        scan.setOnClickListener(v ->
-            startActivityForResult(
-                projectionManager.createScreenCaptureIntent(), 100
-            )
-        );
+    protected void onCreate(Bundle b) {
+        super.onCreate(b);
+        if (Build.VERSION.SDK_INT >= 33) {
+            requestPermissions(
+                new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_NOTIF);
+        } else {
+            startCapture();
+        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onRequestPermissionsResult(int rc, String[] p, int[] r) {
+        super.onRequestPermissionsResult(rc, p, r);
+        startCapture();
+    }
 
-        if (requestCode == 100 && resultCode == RESULT_OK) {
-            result.setText("Ekran icazəsi alındı. OCR sistemi hazırlanır...");
+    private void startCapture() {
+        MediaProjectionManager mpm = (MediaProjectionManager)
+            getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+        startActivityForResult(mpm.createScreenCaptureIntent(), REQ_CAPTURE);
+    }
+
+    @Override
+    protected void onActivityResult(int req, int res, Intent data) {
+        super.onActivityResult(req, res, data);
+        if (req == REQ_CAPTURE && res == RESULT_OK && data != null) {
+            Intent i = new Intent(this, CaptureService.class);
+            i.putExtra("code", res);
+            i.putExtra("data", data);
+            if (Build.VERSION.SDK_INT >= 26) startForegroundService(i);
+            else startService(i);
         }
+        finish();
     }
 }
