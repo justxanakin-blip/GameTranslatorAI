@@ -1,4 +1,4 @@
-package com.gametranslator.ai;
+package com.gametranslator.ai
 
 import android.app.*;
 import android.content.Intent;
