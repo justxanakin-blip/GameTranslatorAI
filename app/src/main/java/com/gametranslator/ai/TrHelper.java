@@ -1,4 +1,4 @@
-package package com.gametranslator.ai;
+package com.gametranslator.ai;
 
 import com.google.mlkit.common.model.DownloadConditions;
 import com.google.mlkit.nl.translate.TranslateLanguage;
