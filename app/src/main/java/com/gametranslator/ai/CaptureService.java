@@ -145,3 +145,4 @@ public class CaptureService extends Service {
         super.onDestroy();
     }
 }
+ 
