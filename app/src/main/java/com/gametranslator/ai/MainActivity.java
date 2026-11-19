@@ -1,4 +1,3 @@
-
 package com.gametranslator.ai;
 
 import android.Manifest;
@@ -52,4 +51,3 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
-
