@@ -28,7 +28,6 @@ android {
 }
 
 dependencies { implementation 'com.alphacephei:vosk-android:0.3.47'
-implementation 'implementation 'com.alphacephei:vosk-android:0.3.47'
 implementation 'com.google.mlkit:translate:17.0.3'
     // OCR (latın əlifbası: ingilis, Azərbaycan, Türk və s.)
     implementation 'com.google.mlkit:text-recognition:16.0.1'
