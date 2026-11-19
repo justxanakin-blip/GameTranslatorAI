@@ -1,4 +1,4 @@
-package gametranslator.ai;
+package com.gametranslator.ai;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
