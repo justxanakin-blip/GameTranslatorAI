@@ -1,6 +1,5 @@
 
 package com.gametranslator.ai;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
