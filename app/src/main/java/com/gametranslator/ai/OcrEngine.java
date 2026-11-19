@@ -97,3 +97,4 @@ public class OcrEngine implements AutoCloseable {
         recognizer.close();
     }
 }
+ 
